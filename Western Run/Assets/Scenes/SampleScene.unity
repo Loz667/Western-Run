@@ -589,7 +589,25 @@ MonoBehaviour:
   initialGravityValue: -9.81
   groundLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
+  turnLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  turnEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1952359716}
+        m_TargetAssemblyTypeName: WesternRun.Spawner, Assembly-CSharp
+        m_MethodName: AddNewDirection
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!143 &894933556
 CharacterController:
   m_ObjectHideFlags: 0
