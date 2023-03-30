@@ -14,6 +14,7 @@ namespace WesternRun.Player
         [SerializeField] private float playerJumpHeight = 1.0f;
         [SerializeField] private float initialGravityValue = -9.81f;
         [SerializeField] private LayerMask groundLayer, turnLayer;
+        [SerializeField] private AnimationClip slideAnimClip;
 
         private float playerSpeed;
         private float currentGravity;
@@ -26,6 +27,10 @@ namespace WesternRun.Player
         private InputAction slideAction;
 
         private CharacterController controller;
+        private Animator anim;
+        private int slidingAnimId;
+
+        private bool IsSliding;
 
         [SerializeField] private UnityEvent<Vector3> turnEvent;
 
@@ -33,6 +38,8 @@ namespace WesternRun.Player
         {
             input = GetComponent<PlayerInput>();
             controller = GetComponent<CharacterController>();
+            anim = GetComponentInChildren<Animator>();
+            slidingAnimId = Animator.StringToHash("Sliding");
 
             turnAction = input.actions["Turn"];
             jumpAction = input.actions["Jump"];
@@ -109,7 +116,28 @@ namespace WesternRun.Player
 
         private void PlayerSlide(InputAction.CallbackContext context)
         {
+            if (!IsSliding && IsGrounded())
+            {
+                StartCoroutine(Slide());
+            }
+        }
 
+        IEnumerator Slide()
+        {
+            IsSliding = true;
+
+            Vector3 origControllerCentre = controller.center;
+            Vector3 newControllerCentre = origControllerCentre;
+            controller.height /= 2;
+            newControllerCentre.y -= controller.height / 2;
+            controller.center = newControllerCentre;
+            
+            anim.Play(slidingAnimId);
+            yield return new WaitForSeconds(slideAnimClip.length);
+
+            controller.height *= 2;
+            controller.center = origControllerCentre;
+            IsSliding = false;
         }
 
         private void Update()
